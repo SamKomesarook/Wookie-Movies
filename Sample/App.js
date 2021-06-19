@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import type {Node} from 'react';
 import {
   SafeAreaView,
@@ -26,6 +26,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import Header from './app/components/header/Header';
+import axios from 'axios';
 
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -54,11 +55,33 @@ const Section = ({children, title}): Node => {
 };
 
 const App: () => Node = () => {
+  const [movies, setMovies] = useState([])
+  const [genres, setGenres] = useState([])
+
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+
+  useEffect(async () => {
+    const api = axios.create({
+      baseURL: 'https://wookie.codesubmit.io/movies',
+      headers: {'Authorization': 'Bearer Wookie2019'}
+  });
+    const res = await api.get();
+    setMovies(res.data.movies);
+    let genresArr = [];
+
+    for (let movie of res.data.movies) {
+    movie.genres.map((genre) => {
+      if (!genresArr.includes(genre)) {
+        genresArr.push(genre);
+      }
+    });
+  }
+  setGenres(genresArr)
+  })
 
   return (
     <SafeAreaView style={backgroundStyle}>
