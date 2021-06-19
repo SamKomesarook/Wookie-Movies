@@ -21,10 +21,11 @@ import {
 import {
   Colors,
   DebugInstructions,
-  Header,
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+
+import Header from './app/components/header/Header';
 
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
