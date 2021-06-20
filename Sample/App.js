@@ -16,6 +16,8 @@ import {
   Text,
   useColorScheme,
   View,
+  Modal,
+  FlatList
 } from 'react-native';
 
 import {
@@ -57,6 +59,7 @@ const Section = ({children, title}): Node => {
 const App: () => Node = () => {
   const [movies, setMovies] = useState([])
   const [genres, setGenres] = useState([])
+  const [selectedMovie, setSelectedMovie] = useState({})
 
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -64,57 +67,97 @@ const App: () => Node = () => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
-  useEffect(async () => {
-    const api = axios.create({
-      baseURL: 'https://wookie.codesubmit.io/movies',
-      headers: {'Authorization': 'Bearer Wookie2019'}
-  });
-    const res = await api.get();
-    setMovies(res.data.movies);
-    let genresArr = [];
-
-    for (let movie of res.data.movies) {
-    movie.genres.map((genre) => {
-      if (!genresArr.includes(genre)) {
-        genresArr.push(genre);
-      }
+  useEffect(() => {
+    async function fetchMyAPI() {
+      const api = axios.create({
+        baseURL: 'https://wookie.codesubmit.io/movies',
+        headers: {'Authorization': 'Bearer Wookie2019'}
     });
-  }
-  setGenres(genresArr)
-  })
+      const res = await api.get();
+      setMovies(res.data.movies);
+      let genresArr = [];
+  
+      for (let movie of res.data.movies) {
+      movie.genres.map((genre) => {
+        if (!genresArr.includes(genre)) {
+          genresArr.push(genre);
+        }
+      });
+    }
+    setGenres(genresArr)
+    }
+
+    fetchMyAPI()
+  }, [])
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
+    <SafeAreaView style={styles.container}>
+      <View styles={styles.view}> 
         <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
+        <FlatList 
+          data={genres}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          renderItem={(item) => {
+            let itemMovies = []
+            movies.map(
+              (movie, i) => {
+                if(movie.genres.includes(item.item)){
+                  itemMovies.push(movie)
+                }
+              }
+            )
+            return (
+             <View>
+                <Text style={styles.genreTitle}>
+                  {item.item}
+                </Text>
+                <FlatList 
+                  data={itemMovies}
+                  horizontal={true}
+                  showsVerticalScrollIndicator={false}
+                  showsHorizontalScrollIndicator={false}
+                  renderItem={(singleItem) => {
+                    return(
+                      <View style={styles.movieContainer}>
+                        <Text style={styles.highlight}>
+                          {singleItem.item.title}
+                        </Text>
+                        </View>
+                  )}}
+        />
+                </View>
+          )}}
+        />
+          </View> 
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  movieContainer: {
+    height: 200,
+    width: 100,
+  },
+  column: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  genreTitle: {
+    marginLeft: 24,
+    fontSize: 24,
+    fontWeight: '600',
+  },
+  view: {
+    flex: 10,
+    paddingTop: 6,
+  },
+  container: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1,
+  },
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,
