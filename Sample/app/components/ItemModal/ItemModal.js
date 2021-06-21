@@ -45,7 +45,7 @@ const ItemModal = props => {
                 {new Date(props.item.released_on).toDateString()}
               </Text>
               <Text style={styles.info}>{props.item.length}</Text>
-              <Text style={styles.info}>{props.item.director}</Text>
+              <Text style={styles.info}>{typeof props.item.director === "object" ? props.item.director.join(', ') : props.item.director}</Text>
             </View>
 
             <View style={styles.row}>
