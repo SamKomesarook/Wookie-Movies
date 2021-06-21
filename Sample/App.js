@@ -16,12 +16,10 @@ import {
   View,
   Modal,
   FlatList,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 
-import {
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 import Header from './app/components/Header/Header';
 import ItemModal from './app/components/ItemModal/ItemModal';
@@ -54,9 +52,9 @@ const Section = ({children, title}): Node => {
 };
 
 const App: () => Node = () => {
-  const [movies, setMovies] = useState([])
-  const [genres, setGenres] = useState([])
-  const [selectedMovie, setSelectedMovie] = useState(null)
+  const [movies, setMovies] = useState([]);
+  const [genres, setGenres] = useState([]);
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -66,80 +64,77 @@ const App: () => Node = () => {
 
   const resetSelected = () => {
     setSelectedMovie(null);
-  }
+  };
 
   useEffect(() => {
     async function fetchMyAPI() {
       const api = axios.create({
         baseURL: 'https://wookie.codesubmit.io/movies',
-        headers: {'Authorization': 'Bearer Wookie2019'}
-    });
+        headers: {Authorization: 'Bearer Wookie2019'},
+      });
       const res = await api.get();
       setMovies(res.data.movies);
       let genresArr = [];
-  
+
       for (let movie of res.data.movies) {
-      movie.genres.map((genre) => {
-        if (!genresArr.includes(genre)) {
-          genresArr.push(genre);
-        }
-      });
-    }
-    setGenres(genresArr)
+        movie.genres.map(genre => {
+          if (!genresArr.includes(genre)) {
+            genresArr.push(genre);
+          }
+        });
+      }
+      setGenres(genresArr);
     }
 
-    fetchMyAPI()
-  }, [])
+    fetchMyAPI();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
-      <View styles={styles.view}> 
+      <View styles={styles.view}>
         <Header />
-        <FlatList 
+        <FlatList
           data={genres}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          renderItem={(item) => {
-            let itemMovies = []
-            movies.map(
-              (movie, i) => {
-                if(movie.genres.includes(item.item)){
-                  itemMovies.push(movie)
-                }
+          renderItem={item => {
+            let itemMovies = [];
+            movies.map((movie, i) => {
+              if (movie.genres.includes(item.item)) {
+                itemMovies.push(movie);
               }
-            )
+            });
             return (
-             <View>
-                <Text style={styles.genreTitle}>
-                  {item.item}
-                </Text>
-                <FlatList 
+              <View>
+                <Text style={styles.genreTitle}>{item.item}</Text>
+                <FlatList
                   data={itemMovies}
                   horizontal={true}
                   showsVerticalScrollIndicator={false}
                   showsHorizontalScrollIndicator={false}
-                  renderItem={(singleItem) => {
-                    return(
-                      <TouchableOpacity onPress={() => setSelectedMovie(singleItem.item)}>
-                      <View style={styles.movieContainer}>
-                        <Text style={styles.highlight}>
-                          {singleItem.item.title}
-                        </Text>
+                  renderItem={singleItem => {
+                    return (
+                      <TouchableOpacity
+                        onPress={() => setSelectedMovie(singleItem.item)}>
+                        <View style={styles.movieContainer}>
+                          <Text style={styles.highlight}>
+                            {singleItem.item.title}
+                          </Text>
                         </View>
-                        </TouchableOpacity>
-                  )}}
+                      </TouchableOpacity>
+                    );
+                  }}
+                />
+              </View>
+            );
+          }}
         />
-                </View>
-          )}}
-        />
-          </View> 
-          {
-            selectedMovie && 
-            <Modal animationType="slide">
-              <ItemModal item={selectedMovie} reset={resetSelected}/>
-            </Modal>
-          }
-          
+      </View>
+      {selectedMovie && (
+        <Modal animationType="slide">
+          <ItemModal item={selectedMovie} reset={resetSelected} />
+        </Modal>
+      )}
     </SafeAreaView>
   );
 };
@@ -151,7 +146,7 @@ const styles = StyleSheet.create({
   },
   column: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   genreTitle: {
     marginLeft: 24,
