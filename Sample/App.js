@@ -17,6 +17,7 @@ import {
   Modal,
   FlatList,
   TouchableOpacity,
+  ImageBackground,
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -91,7 +92,7 @@ const App: () => Node = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View styles={styles.view}>
+      <View style={styles.view}>
         <Header />
         <FlatList
           data={genres}
@@ -105,7 +106,7 @@ const App: () => Node = () => {
               }
             });
             return (
-              <View>
+              <View style={styles.movie}>
                 <Text style={styles.genreTitle}>{item.item}</Text>
                 <FlatList
                   data={itemMovies}
@@ -115,12 +116,17 @@ const App: () => Node = () => {
                   renderItem={singleItem => {
                     return (
                       <TouchableOpacity
+                      style={styles.movieItem}
                         onPress={() => setSelectedMovie(singleItem.item)}>
-                        <View style={styles.movieContainer}>
+                        <ImageBackground
+                          style={styles.movieContainer}
+                          source={{
+                            uri: singleItem.item.backdrop,
+                          }}>
                           <Text style={styles.highlight}>
                             {singleItem.item.title}
                           </Text>
-                        </View>
+                        </ImageBackground>
                       </TouchableOpacity>
                     );
                   }}
@@ -140,9 +146,16 @@ const App: () => Node = () => {
 };
 
 const styles = StyleSheet.create({
+  movieItem: {
+    marginHorizontal: 6
+  },
+  movie: {
+    marginLeft: 12,
+  },
   movieContainer: {
     height: 200,
     width: 100,
+    opacity: 0.5,
   },
   column: {
     display: 'flex',
@@ -178,6 +191,7 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: '700',
+    opacity: 1,
   },
 });
 
