@@ -10,24 +10,21 @@ import React, {useState, useEffect} from 'react';
 import type {Node} from 'react';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   useColorScheme,
   View,
   Modal,
-  FlatList
+  FlatList,
+  TouchableOpacity
 } from 'react-native';
 
 import {
   Colors,
-  DebugInstructions,
-  LearnMoreLinks,
-  ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import Header from './app/components/header/Header';
+import Header from './app/components/Header/Header';
+import ItemModal from './app/components/ItemModal/ItemModal';
 import axios from 'axios';
 
 const Section = ({children, title}): Node => {
@@ -59,13 +56,17 @@ const Section = ({children, title}): Node => {
 const App: () => Node = () => {
   const [movies, setMovies] = useState([])
   const [genres, setGenres] = useState([])
-  const [selectedMovie, setSelectedMovie] = useState({})
+  const [selectedMovie, setSelectedMovie] = useState(null)
 
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+
+  const resetSelected = () => {
+    setSelectedMovie(null);
+  }
 
   useEffect(() => {
     async function fetchMyAPI() {
@@ -119,17 +120,26 @@ const App: () => Node = () => {
                   showsHorizontalScrollIndicator={false}
                   renderItem={(singleItem) => {
                     return(
+                      <TouchableOpacity onPress={() => setSelectedMovie(singleItem.item)}>
                       <View style={styles.movieContainer}>
                         <Text style={styles.highlight}>
                           {singleItem.item.title}
                         </Text>
                         </View>
+                        </TouchableOpacity>
                   )}}
         />
                 </View>
           )}}
         />
           </View> 
+          {
+            selectedMovie && 
+            <Modal animationType="slide">
+              <ItemModal item={selectedMovie} reset={resetSelected}/>
+            </Modal>
+          }
+          
     </SafeAreaView>
   );
 };
