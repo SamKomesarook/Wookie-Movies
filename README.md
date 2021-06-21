@@ -27,7 +27,7 @@ Your .app bundle must represent a simulator build of your app. After running in 
 Alternatively, you may run xcodebuild -sdk iphonesimulator (if you use .xcodeproj) or xcodebuild -sdk iphonesimulator -workspace Sample.xcworkspace/ -scheme <your-scheme> -configuration Debug (if you use .xcworkspace) in your project directory, then zip the .app bundle in build/Debug-iphonesimulator/.
 
 For Android, include assignment.apk containing your app **in the root of the repository**.
-After your app is built, either via Android Studio or by running the command ./gradlew assembleDebug in your project directory, look in <project-name>/<module-name>/build/outputs/apk/.
+After your app is built, either via Android Studio or by running the command ./gradlew assembleRelease in your project directory, look in <project-name>/<module-name>/build/outputs/apk/.
 
 ### Evaluation Criteria
 
