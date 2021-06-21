@@ -26,7 +26,7 @@ const ItemModal = props => {
         </ImageBackground>
       </View>
       <View style={styles.bottomSection}>
-        <View style={styles.row}>
+        <View style={styles.topRow}>
           <Image
             source={{
               uri: props.item.poster,
@@ -39,11 +39,13 @@ const ItemModal = props => {
             <Text style={styles.title}>{props.item.title}</Text>
           </View>
         </View>
-        <Text style={styles.title}>
+        <View style={styles.row}>
+        <Text style={styles.info}>
           {new Date(props.item.released_on).toDateString()}
         </Text>
-        <Text style={styles.title}>{props.item.length}</Text>
-        <Text style={styles.title}>{props.item.director}</Text>
+        <Text style={styles.info}>{props.item.length}</Text>
+        <Text style={styles.info}>{props.item.director}</Text>
+        </View>
       </View>
       </View>
     </SafeAreaView>
@@ -55,7 +57,16 @@ const styles = StyleSheet.create({
     flex: 1,
     flexGrow: 1,
   },
+  info: {
+    flex: 1,
+    fontSize: 15,
+    textAlign: 'center',
+  },
   row: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  topRow: {
     display: 'flex',
     flexDirection: 'row',
     top: -50,
@@ -67,6 +78,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     display: 'flex',
     flexDirection: 'column',
+    width: 200
   },
   background: {
     overflow: 'visible',
@@ -102,6 +114,7 @@ const styles = StyleSheet.create({
   },
   bottomSection: {
     flex: 3,
+    marginHorizontal: 8
   },
 });
 
