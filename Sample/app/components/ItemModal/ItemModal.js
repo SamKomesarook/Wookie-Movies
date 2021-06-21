@@ -37,6 +37,7 @@ const ItemModal = props => {
             />
             <View style={styles.movieTitle}>
               <Text style={styles.title}>{props.item.title}</Text>
+              <Text style={styles.rating}>{props.item.imdb_rating}/10</Text>
             </View>
           </View>
           <ScrollView style={styles.scrollable}>
@@ -45,7 +46,11 @@ const ItemModal = props => {
                 {new Date(props.item.released_on).toDateString()}
               </Text>
               <Text style={styles.info}>{props.item.length}</Text>
-              <Text style={styles.info}>{typeof props.item.director === "object" ? props.item.director.join(', ') : props.item.director}</Text>
+              <Text style={styles.info}>
+                {typeof props.item.director === 'object'
+                  ? props.item.director.join(', ')
+                  : props.item.director}
+              </Text>
             </View>
 
             <View style={styles.row}>
@@ -125,12 +130,18 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     textAlign: 'center',
   },
+  rating: {
+    fontSize: 18,
+    marginLeft: 5,
+    marginTop: 12,
+    textAlign: 'center',
+  },
   container: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
-    marginBottom: 12
+    marginBottom: 12,
   },
   bottomSection: {
     flex: 3,

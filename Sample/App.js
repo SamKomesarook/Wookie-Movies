@@ -116,7 +116,7 @@ const App: () => Node = () => {
                   renderItem={singleItem => {
                     return (
                       <TouchableOpacity
-                      style={styles.movieItem}
+                        style={styles.movieItem}
                         onPress={() => setSelectedMovie(singleItem.item)}>
                         <ImageBackground
                           style={styles.movieContainer}
@@ -147,7 +147,7 @@ const App: () => Node = () => {
 
 const styles = StyleSheet.create({
   movieItem: {
-    marginHorizontal: 6
+    marginHorizontal: 6,
   },
   movie: {
     marginLeft: 12,
