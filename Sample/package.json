@@ -11,6 +11,7 @@
     "pretty": "npx prettier --write \"./**/*.{ts,js,tsx}\""
   },
   "dependencies": {
+    "@react-navigation/native": "^5.9.4",
     "axios": "^0.21.1",
     "axois": "0.0.1-security",
     "react": "17.0.1",
